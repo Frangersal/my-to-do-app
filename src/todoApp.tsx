@@ -10,17 +10,27 @@ export const TodoApp = () => {
   return (
     //
     <>
-    {/* <div className="container-fluid bg-dark" style={{ backgroundColor: '#eee' }}>
-      <button type="button" className="btn btn-primary">Primary</button>
-      <button type="button" className="btn btn-secondary">Secondary</button>
-    </div> */}
+      {/* <div className="container-fluid bg-dark" style={{ backgroundColor: '#eee' }}>
+        <div className="card bg-primary-subtle">
+          <div className="card-header">
+            Featured
+          </div>
+          <div className="card-body">
+            <h5 className="card-title">Special title treatment</h5>
+            <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" className="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+      </div> */}
 
 
-      <section className="vh-100" style={{ backgroundColor: '#eee' }}>
+      <section className="vh-100" style={{
+    background: '#eee',
+  }}>
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col col-lg-9 col-xl-7">
-              <div className="card rounded-3">
+              <div className="card rounded-3 text-bg-dark">
                 <div className="card-body p-4 ">
                   <h4 className="text-center my-3 pb-3">To Do App</h4>
 
@@ -40,7 +50,7 @@ export const TodoApp = () => {
                     </div>
                   </form>
 
-                  <table className="table mb-4">
+                  <table className="table mb-4  table-dark ">
                     <thead>
                       <tr>
                         <th scope="col">No.</th>
@@ -55,8 +65,10 @@ export const TodoApp = () => {
                         <td>Buy groceries for next week</td>
                         <td>In progress</td>
                         <td>
-                          <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-danger">Delete</button>
-                          <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-success ms-1">Finished</button>
+                          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-danger">Delete</button>
+                            <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-success">Finished</button>
+                          </div>
                         </td>
                       </tr>
                       <tr>
@@ -64,8 +76,10 @@ export const TodoApp = () => {
                         <td>Renew car insurance</td>
                         <td>In progress</td>
                         <td>
-                          <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-danger">Delete</button>
-                          <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-success ms-1">Finished</button>
+                          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-danger">Delete</button>
+                            <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-success">Finished</button>
+                          </div>
                         </td>
                       </tr>
                       <tr>
@@ -73,8 +87,10 @@ export const TodoApp = () => {
                         <td>Sign up for online course</td>
                         <td>In progress</td>
                         <td>
-                          <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-danger">Delete</button>
-                          <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-success ms-1">Finished</button>
+                          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-danger">Delete</button>
+                            <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-success">Finished</button>
+                          </div>
                         </td>
                       </tr>
                     </tbody>
@@ -84,7 +100,7 @@ export const TodoApp = () => {
             </div>
           </div>
         </div>
-      </section> 
+      </section>
     </>
   )
 }
