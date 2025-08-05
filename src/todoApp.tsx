@@ -1,4 +1,5 @@
 import { useState } from 'react'
+// import { db } from "./data/db.js";
 import './todoApp.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -7,35 +8,76 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 /// ===>>> Componente de AddTask / Añadir Tarea <<<===///
 const AddTask = ({ }) => {
 
+  function handleSubmit(e) {
+    // Prevent the browser from reloading the page
+    e.preventDefault();
+
+    // Read the form data
+    const form = e.target;
+    const formData = new FormData(form);
+
+    // You can pass formData as a fetch body directly:
+    // fetch("/some-api", { method: form.method, body: formData });
+
+    // Or you can work with it as a plain object:
+    const formJson = Object.fromEntries(formData.entries());
+    const arrTask = [null,formJson.inputTask,"Pendiente",false]
+    console.log(arrTask);
+  }
+
 
   return (
     <>
-      <div className="col-12">
-        <div data-mdb-input-init className="form-outline">
+      <form
+        className="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2"
+        onSubmit={handleSubmit}
+      >
 
-          <input type="text" id="form1" className="form-control" placeholder="Agregar tarea aqui..." />
+        <div className="col-12">
+          <div data-mdb-input-init className="form-outline">
+
+            <input
+              name="inputTask"
+              type="text"
+              id="form1"
+              className="form-control"
+              placeholder="Agregar tarea aqui..." 
+              
+              />
+
+          </div>
         </div>
-      </div>
 
-      <div className="col-12">
+        <div className="col-12">
 
-        <ButtonSave />
+          <button
+            type="submit"
+            data-mdb-button-init data-mdb-ripple-init className="btn btn-primary"
 
-      </div>
+          >
+
+            Guardar
+
+          </button>
+          {/* <ButtonSave /> */}
+
+        </div>
+
+      </form>
     </>
   )
 }
 
 /// ===>>> Componente de Save / Guardar Tarea <<<===///
-const ButtonSave = ({ }) => {
+// const ButtonSave = ({ }) => {
 
 
-  return (
-    <>
-      <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary">Guardar</button>
-    </>
-  )
-}
+//   return (
+//     <>
+//       <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary">Guardar</button>
+//     </>
+//   )
+// }
 
 /// ===>>> Componente de Task / Tarea <<<===///
 const Task = ({ }) => {
@@ -86,6 +128,12 @@ const ButtonDelete = ({ }) => {
 /// ===>>> Componente Padre <<<=== ///
 export const TodoApp = () => {
 
+  /// Inicializando lista de tareas en localStorage
+  const initialTaskList = () => {
+    const localStorageTaskList = localStorage.getItem('task')
+    return localStorageTaskList ? JSON.parse(localStorageTaskList) : []
+  }
+
   /// ===>>> States <<<=== ///
   const [task, setTask] = useState([])
 
@@ -102,11 +150,9 @@ export const TodoApp = () => {
                 <div className="card-body p-4 ">
                   <h4 className="text-center my-3 pb-3">To Do App</h4>
 
-                  <form className="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
 
-                    <AddTask />
+                  <AddTask />
 
-                  </form>
 
                   <table className="table mb-4  table-dark ">
                     <thead>
