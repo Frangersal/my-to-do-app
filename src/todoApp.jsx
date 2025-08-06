@@ -13,7 +13,8 @@ const AddTask = ({ storages, setStorages, todos, setTodos, }) => {
 
     const form = e.target;
     const formData = new FormData(form);
-    const todosID = todos.length;
+    // Generar ID único usando timestamp + número aleatorio para evitar duplicados
+    const todosID = Date.now() + Math.floor(Math.random() * 1000);
 
     // Crear el objeto de la nueva tarea
     const formJson = Object.fromEntries(formData.entries());
