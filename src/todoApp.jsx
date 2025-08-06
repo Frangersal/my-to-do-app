@@ -93,12 +93,26 @@ const Task = ({ task, index, todos, setTodos }) => {
     <>
       <tr>
         <th scope="row">{index + 1}</th>
-        <td>{task.task}</td>
-        <td>{task.status}</td>
+        <td style={{
+          textDecoration: task.done ? 'line-through' : 'none',
+          opacity: task.done ? 0.6 : 1
+        }}>
+          {task.task}
+        </td>
+        <td
+
+          style={{
+            color: task.status === "Hecho" ? '#4dff47ff' : 'inherit',
+            fontWeight: task.status === "Hecho" ? 'bold' : 'normal',
+            opacity: task.done ? 0.6 : 1
+          }}>
+
+          {task.status}
+        </td>
         <td>
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
 
-            <ButtonCheck />
+            <ButtonCheck taskId={task.id} todos={todos} setTodos={setTodos} />
 
             <ButtonDelete taskId={task.id} todos={todos} setTodos={setTodos} />
 
@@ -111,11 +125,41 @@ const Task = ({ task, index, todos, setTodos }) => {
 
 /// ===>>> Componente de Delete / Eliminar Tarea <<<===///
 // Botón para marcar tarea como completada
-const ButtonCheck = ({ }) => {
+const ButtonCheck = ({ taskId, todos, setTodos }) => {
+
+  // Función para alternar el estado de completado de la tarea
+  const handleToggleComplete = () => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === taskId) {
+        return {
+          ...todo,
+          done: !todo.done,
+          status: !todo.done ? "Hecho" : "Pendiente"
+        };
+      }
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+
+    // Actualizar localStorage
+    try {
+      localStorage.setItem('myArray', JSON.stringify(updatedTodos));
+      console.log("Estado de tarea actualizado, localStorage sincronizado");
+    } catch (error) {
+      console.log("Error actualizando localStorage:", error);
+    }
+  };
 
   return (
     <>
-      <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-success">Tachar</button>
+      <button
+        type="button"
+        onClick={handleToggleComplete}
+        data-mdb-button-init data-mdb-ripple-init className="btn btn-success"
+      >
+        Tachar
+      </button>
     </>
   )
 }
@@ -141,7 +185,7 @@ const ButtonDelete = ({ taskId, todos, setTodos }) => {
 
   return (
     <>
-      <button 
+      <button
         type="button"
         onClick={handleDelete}
         data-mdb-button-init data-mdb-ripple-init className="btn btn-danger"
@@ -202,12 +246,12 @@ export const TodoApp = () => {
                       {/* Mapear sobre las tareas para renderizar cada una */}
                       {todos.length > 0 ? (
                         todos.map((todo, index) => (
-                          <Task 
-                            key={todo.id} 
-                            task={todo} 
-                            index={index} 
-                            todos={todos} 
-                            setTodos={setTodos} 
+                          <Task
+                            key={todo.id}
+                            task={todo}
+                            index={index}
+                            todos={todos}
+                            setTodos={setTodos}
                           />
                         ))
                       ) : (
