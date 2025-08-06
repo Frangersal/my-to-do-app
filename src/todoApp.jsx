@@ -38,6 +38,9 @@ const AddTask = ({ storages, setStorages, todos, setTodos, }) => {
     } catch {
       localStorage.setItem('myArray', JSON.stringify([newTodo]));
     }
+
+    // Limpiar el formulario después de agregar la tarea
+    form.reset();
   }
 
   // Renderizado para agregar nuevas tareas
@@ -83,14 +86,14 @@ const AddTask = ({ storages, setStorages, todos, setTodos, }) => {
 
 /// ===>>> Componente de Task / Tarea <<<===///
 // Componente que renderiza una fila de tarea individual
-const Task = ({ }) => {
+const Task = ({ task, index }) => {
 
   return (
     <>
       <tr>
-        <th scope="row">1</th>
-        <td>Buy groceries for next week</td>
-        <td>In progress</td>
+        <th scope="row">{index + 1}</th>
+        <td>{task.task}</td>
+        <td>{task.status}</td>
         <td>
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
 
@@ -135,6 +138,18 @@ export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [storages, setStorages] = useState([]);
 
+  // Cargar tareas del localStorage al iniciar la aplicación
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('myArray'));
+      if (stored && Array.isArray(stored)) {
+        setTodos(stored);
+      }
+    } catch (error) {
+      console.log("Error cargando tareas del localStorage:", error);
+    }
+  }, []);
+
   /// ===>>> Renderizado <<<=== ///
   return (
     <>
@@ -162,9 +177,16 @@ export const TodoApp = () => {
                       </tr>
                     </thead>
                     <tbody>
-
-                      <Task />
-
+                      {/* Mapear sobre las tareas para renderizar cada una */}
+                      {todos.length > 0 ? (
+                        todos.map((todo, index) => (
+                          <Task key={todo.id} task={todo} index={index} />
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="4" className="text-center">No hay tareas agregadas</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
