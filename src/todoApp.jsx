@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // import { db } from "./data/db.js";
 import './todoApp.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,24 +6,40 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
 /// ===>>> Componente de AddTask / Añadir Tarea <<<===///
-const AddTask = ({ }) => {
+const AddTask = ({ storages, setStorages, todos, setTodos, }) => {
+  // Cargar tareas del localStorage al iniciar
 
-  function handleSubmit(e) {
-    // Prevent the browser from reloading the page
-    e.preventDefault();
 
-    // Read the form data
-    const form = e.target;
-    const formData = new FormData(form);
+function handleSubmit(e) {
+  e.preventDefault();
 
-    // You can pass formData as a fetch body directly:
-    // fetch("/some-api", { method: form.method, body: formData });
+  const form = e.target;
+  const formData = new FormData(form);
+  const todosID = todos.length;
 
-    // Or you can work with it as a plain object:
-    const formJson = Object.fromEntries(formData.entries());
-    const arrTask = [null,formJson.inputTask,"Pendiente",false]
-    console.log(arrTask);
+  const formJson = Object.fromEntries(formData.entries());
+  const newTodo = {
+    id: todosID,
+    task: formJson.inputTask,
+    status: "Pendiente",
+    done: false
+  };
+
+  const updatedTodos = [...todos, newTodo];
+  setTodos(updatedTodos);
+
+  // Guardar en localStorage
+  try {
+    const stored = JSON.parse(localStorage.getItem('myArray'));
+    const existing = Array.isArray(stored) ? stored : [];
+    const updatedStorage = [...existing, newTodo];
+    localStorage.setItem('myArray', JSON.stringify(updatedStorage));
+    console.log("Guardado:", updatedStorage);
+  } catch {
+    localStorage.setItem('myArray', JSON.stringify([newTodo]));
   }
+}
+
 
 
   return (
@@ -41,9 +57,9 @@ const AddTask = ({ }) => {
               type="text"
               id="form1"
               className="form-control"
-              placeholder="Agregar tarea aqui..." 
-              
-              />
+              placeholder="Agregar tarea aqui..."
+
+            />
 
           </div>
         </div>
@@ -134,8 +150,17 @@ export const TodoApp = () => {
     return localStorageTaskList ? JSON.parse(localStorageTaskList) : []
   }
 
+  // const initialTodos = [
+  // {
+  //   id: 0,
+  //   task: "Tarea 0 Test test test.",
+  //   status: "En progreso",
+  //   done: false,
+  // },
+  // ];
   /// ===>>> States <<<=== ///
-  const [task, setTask] = useState([])
+  const [todos, setTodos] = useState([]);
+  const [storages, setStorages] = useState([]);
 
   /// ===>>> Renderizado <<<=== ///
   return (
@@ -151,7 +176,7 @@ export const TodoApp = () => {
                   <h4 className="text-center my-3 pb-3">To Do App</h4>
 
 
-                  <AddTask />
+                  <AddTask tasks={storages} setTasks={setStorages} todos={todos} setTodos={setTodos} />
 
 
                   <table className="table mb-4  table-dark ">
