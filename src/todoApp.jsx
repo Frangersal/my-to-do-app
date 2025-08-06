@@ -86,7 +86,7 @@ const AddTask = ({ storages, setStorages, todos, setTodos, }) => {
 
 /// ===>>> Componente de Task / Tarea <<<===///
 // Componente que renderiza una fila de tarea individual
-const Task = ({ task, index }) => {
+const Task = ({ task, index, todos, setTodos }) => {
 
   return (
     <>
@@ -99,7 +99,7 @@ const Task = ({ task, index }) => {
 
             <ButtonCheck />
 
-            <ButtonDelete />
+            <ButtonDelete taskId={task.id} todos={todos} setTodos={setTodos} />
 
           </div>
         </td>
@@ -121,11 +121,32 @@ const ButtonCheck = ({ }) => {
 
 /// ===>>> Componente de Delete / Eliminar Tarea <<<===///
 // Botón para eliminar tarea
-const ButtonDelete = ({ }) => {
+const ButtonDelete = ({ taskId, todos, setTodos }) => {
+
+  // Función para eliminar la tarea
+  const handleDelete = () => {
+    // Filtrar las tareas para eliminar la que coincida con el ID
+    const updatedTodos = todos.filter(todo => todo.id !== taskId);
+    setTodos(updatedTodos);
+
+    // Actualizar localStorage
+    try {
+      localStorage.setItem('myArray', JSON.stringify(updatedTodos));
+      console.log("Tarea eliminada, localStorage actualizado");
+    } catch (error) {
+      console.log("Error actualizando localStorage:", error);
+    }
+  };
 
   return (
     <>
-      <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-danger">Eliminar</button>
+      <button 
+        type="button"
+        onClick={handleDelete}
+        data-mdb-button-init data-mdb-ripple-init className="btn btn-danger"
+      >
+        Eliminar
+      </button>
     </>
   )
 }
@@ -180,7 +201,13 @@ export const TodoApp = () => {
                       {/* Mapear sobre las tareas para renderizar cada una */}
                       {todos.length > 0 ? (
                         todos.map((todo, index) => (
-                          <Task key={todo.id} task={todo} index={index} />
+                          <Task 
+                            key={todo.id} 
+                            task={todo} 
+                            index={index} 
+                            todos={todos} 
+                            setTodos={setTodos} 
+                          />
                         ))
                       ) : (
                         <tr>
