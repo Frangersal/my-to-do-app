@@ -4,44 +4,43 @@ import './todoApp.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-
 /// ===>>> Componente de AddTask / Añadir Tarea <<<===///
 const AddTask = ({ storages, setStorages, todos, setTodos, }) => {
-  // Cargar tareas del localStorage al iniciar
 
+  // Función para manejar el envío del formulario
+  function handleSubmit(e) {
+    e.preventDefault();
 
-function handleSubmit(e) {
-  e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const todosID = todos.length;
 
-  const form = e.target;
-  const formData = new FormData(form);
-  const todosID = todos.length;
+    // Crear el objeto de la nueva tarea
+    const formJson = Object.fromEntries(formData.entries());
+    const newTodo = {
+      id: todosID,
+      task: formJson.inputTask,
+      status: "Pendiente",
+      done: false
+    };
 
-  const formJson = Object.fromEntries(formData.entries());
-  const newTodo = {
-    id: todosID,
-    task: formJson.inputTask,
-    status: "Pendiente",
-    done: false
-  };
+    // Actualizar el estado de tareas
+    const updatedTodos = [...todos, newTodo];
+    setTodos(updatedTodos);
 
-  const updatedTodos = [...todos, newTodo];
-  setTodos(updatedTodos);
-
-  // Guardar en localStorage
-  try {
-    const stored = JSON.parse(localStorage.getItem('myArray'));
-    const existing = Array.isArray(stored) ? stored : [];
-    const updatedStorage = [...existing, newTodo];
-    localStorage.setItem('myArray', JSON.stringify(updatedStorage));
-    console.log("Guardado:", updatedStorage);
-  } catch {
-    localStorage.setItem('myArray', JSON.stringify([newTodo]));
+    // Guardar en localStorage
+    try {
+      const stored = JSON.parse(localStorage.getItem('myArray'));
+      const existing = Array.isArray(stored) ? stored : [];
+      const updatedStorage = [...existing, newTodo];
+      localStorage.setItem('myArray', JSON.stringify(updatedStorage));
+      console.log("Guardado:", updatedStorage);
+    } catch {
+      localStorage.setItem('myArray', JSON.stringify([newTodo]));
+    }
   }
-}
 
-
-
+  // Renderizado para agregar nuevas tareas
   return (
     <>
       <form
@@ -69,13 +68,11 @@ function handleSubmit(e) {
           <button
             type="submit"
             data-mdb-button-init data-mdb-ripple-init className="btn btn-primary"
-
           >
 
             Guardar
 
           </button>
-          {/* <ButtonSave /> */}
 
         </div>
 
@@ -84,20 +81,9 @@ function handleSubmit(e) {
   )
 }
 
-/// ===>>> Componente de Save / Guardar Tarea <<<===///
-// const ButtonSave = ({ }) => {
-
-
-//   return (
-//     <>
-//       <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary">Guardar</button>
-//     </>
-//   )
-// }
-
 /// ===>>> Componente de Task / Tarea <<<===///
+// Componente que renderiza una fila de tarea individual
 const Task = ({ }) => {
-
 
   return (
     <>
@@ -120,8 +106,8 @@ const Task = ({ }) => {
 }
 
 /// ===>>> Componente de Delete / Eliminar Tarea <<<===///
+// Botón para marcar tarea como completada
 const ButtonCheck = ({ }) => {
-
 
   return (
     <>
@@ -131,8 +117,8 @@ const ButtonCheck = ({ }) => {
 }
 
 /// ===>>> Componente de Delete / Eliminar Tarea <<<===///
+// Botón para eliminar tarea
 const ButtonDelete = ({ }) => {
-
 
   return (
     <>
@@ -144,21 +130,8 @@ const ButtonDelete = ({ }) => {
 /// ===>>> Componente Padre <<<=== ///
 export const TodoApp = () => {
 
-  /// Inicializando lista de tareas en localStorage
-  const initialTaskList = () => {
-    const localStorageTaskList = localStorage.getItem('task')
-    return localStorageTaskList ? JSON.parse(localStorageTaskList) : []
-  }
-
-  // const initialTodos = [
-  // {
-  //   id: 0,
-  //   task: "Tarea 0 Test test test.",
-  //   status: "En progreso",
-  //   done: false,
-  // },
-  // ];
   /// ===>>> States <<<=== ///
+  // Estados para manejar las tareas
   const [todos, setTodos] = useState([]);
   const [storages, setStorages] = useState([]);
 
@@ -175,10 +148,10 @@ export const TodoApp = () => {
                 <div className="card-body p-4 ">
                   <h4 className="text-center my-3 pb-3">To Do App</h4>
 
-
+                  {/* Componente para agregar nuevas tareas */}
                   <AddTask tasks={storages} setTasks={setStorages} todos={todos} setTodos={setTodos} />
 
-
+                  {/* Tabla que muestra la lista de tareas */}
                   <table className="table mb-4  table-dark ">
                     <thead>
                       <tr>
